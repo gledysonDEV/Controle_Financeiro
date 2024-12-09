@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Transações</h2>
+
+<!-- Formulário de Filtros -->
+<form method="get" class="mb-4">
+    <div class="row">
+        <div class="col-md-3">
+            <label for="tipo">Tipo:</label>
+            <select name="tipo" class="form-control">
+                <option value="" {% if not filtros.tipo %}selected{% endif %}>Todos</option>
+                <option value="Receita" {% if filtros.tipo == "Receita" %}selected{% endif %}>Receita</option>
+                <option value="Despesa" {% if filtros.tipo == "Despesa" %}selected{% endif %}>Despesa</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label for="categoria">Categoria:</label>
+            <input type="text" name="categoria" class="form-control" placeholder="Ex: Alimentação" value="{{ filtros.categoria }}">
+        </div>
+        <div class="col-md-3">
+            <label for="data_inicio">Data Início:</label>
+            <input type="date" name="data_inicio" class="form-control" value="{{ filtros.data_inicio }}">
+        </div>
+        <div class="col-md-3">
+            <label for="data_fim">Data Fim:</label>
+            <input type="date" name="data_fim" class="form-control" value="{{ filtros.data_fim }}">
+        </div>
+    </div>
+    <a href="{% url 'adicionar_transacao' %}" class="btn btn-primary mt-3">Adicionar Transação</a>
+    <button type="submit" class="btn btn-primary mt-3">Filtrar</button>
+    <a href="{% url 'listar_transacoes' %}" class="btn btn-secondary mt-3">Limpar</a>
+</form>
+
+<!-- Tabela de Transações -->
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Descrição</th>
+            <th>Tipo</th>
+            <th>Categoria</th>
+            <th>Valor</th>
+            <th>Data</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for transacao in transacoes %}
+        <tr>
+            <td>{{ transacao.descricao }}</td>
+            <td>{{ transacao.tipo }}</td>
+            <td>{{ transacao.categoria }}</td>
+            <td>R$ {{ transacao.valor }}</td>
+            <td>{{ transacao.data }}</td>
+            <td>
+                <a href="{% url 'editar_transacao' transacao.pk %}" class="btn btn-sm btn-warning">Editar</a>
+                <a href="{% url 'deletar_transacao' transacao.pk %}" class="btn btn-sm btn-danger">Deletar</a>
+                
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="6" class="text-center">Nenhuma transação encontrada.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Deletar Transação</h2>
+<p>Tem certeza de que deseja deletar a transação "<strong>{{ transacao.descricao }}</strong>"?</p>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Deletar</button>
+    <a href="{% url 'listar_transacoes' %}" class="btn btn-secondary">Cancelar</a>
+</form>
+{% endblock %}
